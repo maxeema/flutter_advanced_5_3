@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
-import 'dart:async';
-import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -22,17 +20,19 @@ class _State extends State<MyApp> {
 
   String _status;
 
-
   @override
   void initState() {
+    super.initState();
     _status = 'Not Authenticated';
   }
 
   void _signInAnon() async {
-    FirebaseUser user = await _auth.signInAnonymously();
-    if(user != null && user.isAnonymous == true) {
+    final authResult = await _auth.signInAnonymously();
+    final user = authResult.user;
+    if (user?.isAnonymous == true) {
       setState(() {
-        _status = 'Signed in Anonymously';
+        _status = 'Signed in Anonymously:\n'
+                  'User uid: ${authResult.user.uid}';
       });
     } else {
       setState(() {
